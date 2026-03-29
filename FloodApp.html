@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flood Volunteer Network</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; text-align: center; padding: 20px; background-color: #f4f7f9; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); max-width: 400px; margin: auto; border-top: 5px solid #28a745; }
+        .gps-notice { background-color: #fff3cd; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; text-align: left; border: 1px solid #ffeeba; color: #856404; line-height: 1.4; }
+        label { display: block; text-align: left; font-weight: bold; margin: 10px 0 5px 5px; font-size: 14px; color: #444; }
+        select, input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
+        .btn-green { background-color: #28a745; color: white; padding: 16px; border: none; border-radius: 10px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; }
+        .btn-blue { background-color: #007bff; color: white; padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; width: 100%; margin-top: 15px; text-decoration: none; display: inline-block; font-weight: bold; }
+        #status { margin-top: 15px; font-weight: bold; color: #28a745; min-height: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 style="color:#1e7e34; margin:0;">Flood Volunteer Network</h2>
+    <p style="color:#666; font-size:14px; margin-bottom: 20px;">Real-time Community Road Conditions</p>
+
+    <div class="gps-notice">
+        <b>LOCATION ACCESS REQUIRED:</b> Please ensure your phone GPS is ON. You must click <b>"Allow"</b> when the browser asks for your location to map the flood correctly.
+    </div>
+
+    <label>Current Flood Level:</label>
+    <select id="floodLevel">
+        <option value="Ankle Deep (Safe for most)">Ankle Deep (Safe)</option>
+        <option value="Knee Deep (Saloon cars beware!)">Knee Deep (Caution)</option>
+        <option value="Waist Deep (Hazardous)">Waist Deep (Dangerous)</option>
+        <option value="Fully Submerged (Road Closed)">Road Closed / Submerged</option>
+    </select>
+
+    <label>Landmark or Area Name:</label>
+    <input type="text" id="landmark" placeholder="e.g. Majaz 1, Al Wahda St, etc.">
+
+    <button class="btn-green" onclick="submitReport()">Share Update Now</button>
+    <div id="status"></div>
+
+    <hr style="margin:25px 0; border:0; border-top:1px solid #eee;">
+    <p style="font-size: 13px; font-weight: bold;">Check Local Reports:</p>
+    <a id="viewSheet" class="btn-blue" target="_blank">View Live Flood Map</a>
+</div>
+
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+<script>
+// --- YOUR CONFIGURATION ---
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdpDWwmGkGzJ0A9ufF4-Wynt5PBpmBJwzCeWvhbX1ndzOyTSA/formResponse";
+const LAT_ID = "entry.1473379166";
+const LON_ID = "entry.1192272828";
+const LVL_ID = "entry.2070534611";
+const LND_ID = "entry.2112956441";
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/1t1reD-ify3N_Xjr2MdVt0V24aBYmqpVuN6_LrZsWtmM/edit?usp=sharing";
+
+document.getElementById('viewSheet').href = SHEET_URL;
+
+function submitReport() {
+    const status = document.getElementById('status');
+    const landmark = document.getElementById('landmark').value;
+    
+    if (!landmark) {
+        alert("Please enter a landmark or area name!");
+        return;
+    }
+
+    status.style.color = "#28a745";
+    status.innerText = "Finding your location...";
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const level = document.getElementById('floodLevel').value;
+
+            const form = document.createElement('form');
+            form.action = FORM_URL;
+            form.method = 'POST';
+            form.target = 'hidden_iframe';
+
+            const data = {[LAT_ID]: lat, [LON_ID]: lon, [LVL_ID]: level, [LND_ID]: landmark};
+
+            for (const key in data) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = data[key];
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+
+            status.innerText = "Report Sent Successfully!";
+            alert("Thank you! Your report has been added to the map.");
+            document.getElementById('landmark').value = ""; 
+
+        }, function(error) {
+            status.style.color = "red";
+            status.innerText = "GPS Error. Please check permissions.";
+            alert("GPS Error: " + error.message + ". Please ensure location is enabled in your phone settings.");
+        }, {enableHighAccuracy: true, timeout: 8000});
+    } else {
+        alert("Your browser does not support GPS location.");
+    }
+}
+</script>
+</body>
+</html>

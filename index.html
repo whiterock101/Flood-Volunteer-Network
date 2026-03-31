@@ -1,18 +1,45 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"> 
-    <title>LIVE Sharjah & Dubai Flood Map | Community Updates</title>
+    <title>LIVE Sharjah-Ajman Flood Map | Community Updates</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <meta name="description" content="Live community-driven flood map for Sharjah and Dubai. Report and check road conditions in real-time.">
-    <meta name="keywords" content="Sharjah Flood, Dubai Rain, Muwailah Road Conditions, UAE Flood Map, Live Road Updates">
+    <meta name="keywords" content="Sharjah Flood, Dubai Rain, Ajman flood, UAE Flood Map, Live Road Updates">
     <meta name="author" content="Lea Anzures">
 
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background-color: #f0f4f8; color: #333; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; margin: 20px auto; border-top: 8px solid #28a745; }
+        /* --- LANDING PAGE STYLES --- */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background-color: #f0f4f8; color: #333; margin: 0; padding-bottom: 40px; }
+        
+        .landing-header { 
+            background: linear-gradient(135deg, #003366 0%, #0056b3 100%); 
+            color: white; 
+            padding: 50px 20px; 
+            margin-bottom: -40px; /* Pulls the card up slightly for a modern look */
+        }
+        
+        .landing-header h1 { margin: 0; font-size: 28px; letter-spacing: 1px; }
+        .landing-header p { font-size: 16px; opacity: 0.9; max-width: 500px; margin: 10px auto 0; line-height: 1.5; }
+
+        .purpose-bar {
+            background: #fff;
+            max-width: 600px;
+            margin: 0 auto 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #555;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* --- YOUR ORIGINAL CARD STYLES --- */
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; margin: 20px auto; border-top: 8px solid #28a745; position: relative; z-index: 2; }
         h2 { color: #1e7e34; margin: 0 0 5px 0; font-size: 24px; }
         .subtitle { font-size: 14px; color: #666; margin-bottom: 25px; }
         
@@ -36,12 +63,21 @@
 </head>
 <body>
 
+<div class="landing-header">
+    <h1>🌊 Flood Volunteer Network</h1>
+    <p>A community-driven initiative to help residents in Sharjah and Ajman navigate safely during heavy rains.</p>
+</div>
+
 <div class="card">
-    <h2>Flood Volunteer Network</h2>
-    <p class="subtitle">Live Road Updates • Sharjah & Dubai</p>
+    <div style="font-size: 12px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; color: #1e7e34; margin-bottom: 15px;">
+        Community Control Center
+    </div>
+
+    <h2>Report Road Status</h2>
+    <p class="subtitle">Live Updates • Sharjah & Ajman</p>
 
     <div class="gps-notice">
-        <b>💡 HOW TO USE:</b> Enter the area name and flood level. If your phone asks for GPS, click <b>"Allow"</b> to pin the exact spot on the map!
+        <b>💡 HOW TO USE:</b> Enter the area name and flood level. Click <b>"Allow GPS"</b> to pin your exact location on the map automatically!
     </div>
 
     <label>Current Road Condition:</label>
@@ -53,8 +89,8 @@
         <option value="Submerged">🚫 Road Closed / Submerged</option>
     </select>
 
-    <label>Landmark or Area Name:</label>
-    <input type="text" id="landmark" placeholder="e.g. Muwailah Commercial, Al Wahda St">
+    <label>Area Name and Landmark:</label>
+    <input type="text" id="landmark" placeholder="e.g. Muwailah Commercial along University Road Sharjah">
 
     <button class="btn-green" onclick="submitReport()">Share Update Now</button>
     <div id="status"></div>
@@ -64,7 +100,8 @@
     <a id="viewSheet" class="btn-blue" target="_blank">View Live Flood Map</a>
 
     <div class="footer">
-        Community Project • Created by <b>Lea Anzures</b><br>
+        <b>PURPOSE:</b> To provide real-time, ground-level data that Google Maps might miss during emergencies. By the community, for the community.<br><br>
+        Created by <b>Lea Anzures</b><br>
         Sharjah, UAE | March 2026
     </div>
 </div>
@@ -72,16 +109,13 @@
 <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-// --- YOUR GOOGLE FORM CONFIGURATION ---
+// --- YOUR CONFIGURATION ---
 const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSftkLmIz38aChbdouob_hsxfrAArkpqhOj9GjRsd5t51-HRmA/formResponse";
 const LAT_ID = "entry.224957499"; 
 const LON_ID = "entry.2119998920";
 const LVL_ID = "entry.1735684480"; 
 const LND_ID = "entry.2123057663";
-const SHEET_URL = "https://docs.google.com/spreadsheets/d/1jqvOtLpTU1lW8lWBrnyjAkFQZBOyeV91J8CpY_qzoHM/edit?resourcekey=&gid=723913191#gid=723913191";
-
-// Link the button to your sheet
-document.getElementById('viewSheet').href = SHEET_URL;
+const BASE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1t1reD-ify3N_Xjr2MdVt0V24aBYmqpVuN6_LrZsWtmM/edit?usp=sharing";
 
 function submitReport() {
     const status = document.getElementById('status');
@@ -96,22 +130,17 @@ function submitReport() {
     status.style.color = "#28a745";
     status.innerText = "⏳ Processing your report...";
 
-    // Use Geolocation if available
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             function(pos) {
-                // Success: coordinates + data
                 sendToGoogle(pos.coords.latitude, pos.coords.longitude, level, landmark);
             }, 
             function(error) {
-                // Denied/Error: send landmark only
-                console.warn("GPS access denied. Sending landmark only.");
                 sendToGoogle("GPS Disabled", "GPS Disabled", level, landmark);
             }, 
             {enableHighAccuracy: true, timeout: 6000}
         );
     } else {
-        // Browser doesn't support GPS
         sendToGoogle("Not Supported", "Not Supported", level, landmark);
     }
 }
@@ -123,12 +152,7 @@ function sendToGoogle(lat, lon, lvl, lnd) {
     form.method = 'POST';
     form.target = 'hidden_iframe';
 
-    const fields = {
-        [LAT_ID]: lat, 
-        [LON_ID]: lon, 
-        [LVL_ID]: lvl, 
-        [LND_ID]: lnd
-    };
+    const fields = { [LAT_ID]: lat, [LON_ID]: lon, [LVL_ID]: lvl, [LND_ID]: lnd };
 
     for (const key in fields) {
         const input = document.createElement('input');
@@ -141,7 +165,6 @@ function sendToGoogle(lat, lon, lvl, lnd) {
     document.body.appendChild(form);
     form.submit();
     
-    // Give feedback and clear the form
     setTimeout(() => {
         document.body.removeChild(form);
         status.innerText = "✅ Report shared successfully!";
@@ -149,21 +172,12 @@ function sendToGoogle(lat, lon, lvl, lnd) {
         document.getElementById('landmark').value = "";
     }, 1200);
 }
-   
-    // --- THE CACHE BUSTER HERE ---
     
-    const BASE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1t1reD-ify3N_Xjr2MdVt0V24aBYmqpVuN6_LrZsWtmM/edit?usp=sharing";
-    
-    // This generates a unique number based on the current second
-    const FINAL_URL = BASE_SHEET_URL + "&t=" + new Date().getTime();
-
-    // This updates the "View Live Flood Map" button automatically
-    if (document.getElementById('viewSheet')) {
-        document.getElementById('viewSheet').href = FINAL_URL;
-    }
-    
-    // --- END OF CACHE BUSTER ---
+// --- CACHE BUSTER ---
+const FINAL_URL = BASE_SHEET_URL + "&t=" + new Date().getTime();
+if (document.getElementById('viewSheet')) {
+    document.getElementById('viewSheet').href = FINAL_URL;
+}
 </script>
 </body>
 </html>
-

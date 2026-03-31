@@ -3,23 +3,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"> 
-    <title>LIVE Sharjah & Dubai Flood Map | Community Updates</title>
+    <title>LIVE Community Flood Map | Community Updates</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <meta name="description" content="Live community-driven flood map for Sharjah and Dubai. Report and check road conditions in real-time.">
+    <meta name="description" content="Live community-driven flood map for UAE. Report and check road conditions in real-time.">
     <meta name="keywords" content="Sharjah Flood, Dubai Rain, Muwailah Road Conditions, UAE Flood Map, Live Road Updates">
     <meta name="author" content="Lea Anzures">
 
     <style>
-        .hero-section {
-    background: linear-gradient(rgba(0, 51, 102, 0.8), rgba(0, 51, 102, 0.8)), url('https://images.unsplash.com/photo-1545044846-351ba102b4d5?q=80&w=2000');
-    background-size: cover;
-    color: white;
-    padding: 60px 20px;
-    text-align: center;
-    border-radius: 15px;
-    margin-bottom: 30px;
-}
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background-color: #f0f4f8; color: #333; margin: 0; }
         .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; margin: 20px auto; border-top: 8px solid #28a745; }
         h2 { color: #1e7e34; margin: 0 0 5px 0; font-size: 24px; }
@@ -44,14 +35,10 @@
     </style>
 </head>
 <body>
-<div class="hero-section">
-    <h1>🌊 Flood Volunteer Network</h1>
-    <p>Helping Sharjah & Dubai Stay Safe on the Road</p>
-    <a href="#report-section" class="btn-primary">Report a Flood</a>
-</div>
+
 <div class="card">
     <h2>Flood Volunteer Network</h2>
-    <p class="subtitle">Live Road Updates • Sharjah & Dubai</p>
+    <p class="subtitle">Live Road Updates • UAE</p>
 
     <div class="gps-notice">
         <b>💡 HOW TO USE:</b> Enter the area name and flood level. If your phone asks for GPS, click <b>"Allow"</b> to pin the exact spot on the map!
@@ -66,8 +53,8 @@
         <option value="Submerged">🚫 Road Closed / Submerged</option>
     </select>
 
-    <label>Landmark or Area Name:</label>
-    <input type="text" id="landmark" placeholder="e.g. Muwailah Commercial, Al Wahda St">
+    <label>Location/Area Name and Landmark:</label>
+    <input type="text" id="landmark" placeholder="e.g. Muwailah Commercial, Sharjah in front of Thumbay Hosp">
 
     <button class="btn-green" onclick="submitReport()">Share Update Now</button>
     <div id="status"></div>
@@ -102,7 +89,7 @@ function submitReport() {
     const level = document.getElementById('floodLevel').value;
 
     if (!landmark) { 
-        alert("Please enter a landmark or area name first!"); 
+        alert("Please enter a location, area name and landmark first!"); 
         return; 
     }
 
@@ -177,8 +164,6 @@ function sendToGoogle(lat, lon, lvl, lnd) {
     
     // --- END OF CACHE BUSTER ---
 </script>
-</script>
 </body>
 </html>
-
 

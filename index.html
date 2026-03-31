@@ -52,20 +52,7 @@
 
 <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
-    if (navigator.geolocation) {
-
-function submitReport() {
-    const status = document.getElementById('status');
-    const landmark = document.getElementById('landmark').value;
-    
-    if (!landmark) {
-        alert("Please enter a landmark or area name!");
-        return;
-    }
-
-    status.style.color = "#28a745";
 <script>
-   <script>
 // --- YOUR CONFIGURATION ---
 const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdpDWwmGkGzJ0A9ufF4-Wynt5PBpmBJwzCeWvhbX1ndzOyTSA/formResponse";
 const LAT_ID = "entry.1473379166";
@@ -86,54 +73,45 @@ function submitReport() {
     }
 
     status.style.color = "#28a745";
-    status.innerText = "Sending report...";
+    status.innerText = "Finding your location...";
 
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function(pos) {
-                sendData(pos.coords.latitude, pos.coords.longitude);
-            }, 
-            function(error) {
-                // OVERRIDE: If GPS fails, send anyway
-                sendData("GPS Disabled", "GPS Disabled");
-            }, 
-            {timeout: 5000}
-        );
+        navigator.geolocation.getCurrentPosition(function(pos) {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const level = document.getElementById('floodLevel').value;
+
+            const form = document.createElement('form');
+            form.action = FORM_URL;
+            form.method = 'POST';
+            form.target = 'hidden_iframe';
+
+            const data = {[LAT_ID]: lat, [LON_ID]: lon, [LVL_ID]: level, [LND_ID]: landmark};
+
+            for (const key in data) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = data[key];
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+
+            status.innerText = "Report Sent Successfully!";
+            alert("Thank you! Your report has been added to the map.");
+            document.getElementById('landmark').value = ""; 
+
+        }, function(error) {
+            status.style.color = "red";
+            status.innerText = "GPS Error. Please check permissions.";
+            alert("GPS Error: " + error.message + ". Please ensure location is enabled in your phone settings.");
+        }, {enableHighAccuracy: true, timeout: 8000});
     } else {
-        sendData("Not Supported", "Not Supported");
+        alert("Your browser does not support GPS location.");
     }
-}
-
-function sendData(lat, lon) {
-    const status = document.getElementById('status');
-    const level = document.getElementById('floodLevel').value;
-    const landmark = document.getElementById('landmark').value;
-
-    const form = document.createElement('form');
-    form.action = FORM_URL;
-    form.method = 'POST';
-    form.target = 'hidden_iframe';
-
-    const data = {[LAT_ID]: lat, [LON_ID]: lon, [LVL_ID]: level, [LND_ID]: landmark};
-
-    for (const key in data) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = data[key];
-        form.appendChild(input);
-    }
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-
-    // This part resets the app so it's not "stuck"
-    setTimeout(function() {
-        status.innerText = "✅ Report Sent Successfully!";
-        alert("Thank you! Your update has been shared.");
-        document.getElementById('landmark').value = ""; 
-    }, 1000);
 }
 </script>
 </body>

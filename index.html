@@ -148,6 +148,21 @@ function sendToGoogle(lat, lon, lvl, lnd) {
         document.getElementById('landmark').value = "";
     }, 1200);
 }
+   
+    // --- THE CACHE BUSTER HERE ---
+    
+    const BASE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1t1reD-ify3N_Xjr2MdVt0V24aBYmqpVuN6_LrZsWtmM/edit?usp=sharing";
+    
+    // This generates a unique number based on the current second
+    const FINAL_URL = BASE_SHEET_URL + "&t=" + new Date().getTime();
+
+    // This updates the "View Live Flood Map" button automatically
+    if (document.getElementById('viewSheet')) {
+        document.getElementById('viewSheet').href = FINAL_URL;
+    }
+    
+    // --- END OF CACHE BUSTER ---
+</script>
 </script>
 </body>
 </html>

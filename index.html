@@ -1,132 +1,182 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flood Volunteer Network | Sharjah & Dubai</title>
+    <meta charset="UTF-8"> 
+    <title>LIVE Sharjah & Dubai Flood Map | Community Updates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="description" content="Live community-driven flood map for Sharjah and Dubai. Report and check road conditions in real-time.">
+    <meta name="keywords" content="Sharjah Flood, Dubai Rain, Muwailah Road Conditions, UAE Flood Map, Live Road Updates">
+    <meta name="author" content="Lea Anzures">
+
     <style>
-        :root {
-            --primary-blue: #003366;
-            --accent-light: #f4f7f9;
-            --success-green: #28a745;
-        }
+        .hero-section {
+    background: linear-gradient(rgba(0, 51, 102, 0.8), rgba(0, 51, 102, 0.8)), url('https://images.unsplash.com/photo-1545044846-351ba102b4d5?q=80&w=2000');
+    background-size: cover;
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; padding: 20px; background-color: #f0f4f8; color: #333; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; margin: 20px auto; border-top: 8px solid #28a745; }
+        h2 { color: #1e7e34; margin: 0 0 5px 0; font-size: 24px; }
+        .subtitle { font-size: 14px; color: #666; margin-bottom: 25px; }
+        
+        .gps-notice { background-color: #e7f3ff; padding: 12px; border-radius: 10px; font-size: 13px; margin-bottom: 20px; text-align: left; border: 1px solid #b3d7ff; color: #004085; line-height: 1.4; }
+        
+        label { display: block; text-align: left; font-weight: bold; margin: 15px 0 5px 5px; font-size: 14px; color: #444; }
+        select, input { width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #d1d9e0; box-sizing: border-box; font-size: 16px; background-color: #fff; transition: border-color 0.3s; }
+        select:focus, input:focus { border-color: #28a745; outline: none; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--accent-light);
-            color: #333;
-        }
+        .btn-green { background-color: #28a745; color: white; padding: 18px; border: none; border-radius: 12px; cursor: pointer; font-size: 18px; width: 100%; font-weight: bold; transition: background 0.3s, transform 0.1s; box-shadow: 0 4px 6px rgba(40, 167, 69, 0.2); }
+        .btn-green:hover { background-color: #218838; }
+        .btn-green:active { transform: scale(0.98); }
 
-        /* --- LANDING PAGE HERO SECTION --- */
-        .hero {
-            background: linear-gradient(rgba(0, 51, 102, 0.85), rgba(0, 51, 102, 0.85)), 
-                        url('https://images.unsplash.com/photo-1545044846-351ba102b4d5?q=80&w=2000');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            border-bottom: 5px solid #0056b3;
-        }
+        .btn-blue { background-color: #007bff; color: white; padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-size: 16px; width: 100%; margin-top: 15px; text-decoration: none; display: inline-block; font-weight: bold; transition: background 0.3s; }
+        .btn-blue:hover { background-color: #0069d9; }
 
-        .hero h1 { margin: 0; font-size: 2.2rem; }
-        .hero p { font-size: 1.1rem; opacity: 0.9; margin-top: 10px; }
-
-        /* --- CONTENT CONTAINER --- */
-        .container {
-            max-width: 600px;
-            margin: -30px auto 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .btn-box {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        /* --- BUTTON STYLING --- */
-        .main-btn {
-            display: block;
-            padding: 18px;
-            text-align: center;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            transition: transform 0.2s, background-color 0.2s;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .main-btn:active { transform: scale(0.97); }
-
-        .view-map { background-color: var(--success-green); color: white; }
-        .view-map:hover { background-color: #218838; }
-
-        .submit-report { background-color: var(--primary-blue); color: white; }
-        .submit-report:hover { background-color: #002244; }
-
-        footer {
-            text-align: center;
-            font-size: 0.8rem;
-            color: #777;
-            padding: 20px;
-        }
+        #status { margin-top: 20px; font-weight: bold; color: #28a745; min-height: 24px; font-size: 15px; }
+        .footer { margin-top: 40px; font-size: 11px; color: #aaa; line-height: 1.6; }
+        hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
     </style>
 </head>
 <body>
+<div class="hero-section">
+    <h1>🌊 Flood Volunteer Network</h1>
+    <p>Helping Sharjah & Dubai Stay Safe on the Road</p>
+    <a href="#report-section" class="btn-primary">Report a Flood</a>
+</div>
+<div class="card">
+    <h2>Flood Volunteer Network</h2>
+    <p class="subtitle">Live Road Updates • Sharjah & Dubai</p>
 
-    <section class="hero">
-        <h1>Flood Volunteer Network</h1>
-        <p>Real-time road & flood updates for the UAE community.</p>
-    </section>
-
-    <div class="container">
-        <h3>📍 Community Dashboard</h3>
-        <p>Stay safe and informed. Use the buttons below to check the live map or report new flood landmarks in your area.</p>
-
-        <div class="btn-box">
-            <button id="viewSheet" class="main-btn view-map">🗺️ View Live Flood Map</button>
-            
-            <hr style="width:100%; border: 0.5px solid #eee; margin: 10px 0;">
-            
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSftkLmIz38aChbdouob_hsxfrAArkpqhOj9GjRsd5t51-HRmA/viewform" target="_blank" class="main-btn submit-report">📢 Submit New Report</a>
-        </div>
+    <div class="gps-notice">
+        <b>💡 HOW TO USE:</b> Enter the area name and flood level. If your phone asks for GPS, click <b>"Allow"</b> to pin the exact spot on the map!
     </div>
 
-    <footer>
-        © 2026 Flood Volunteer Network | Sharjah & Dubai Community Project
-    </footer>
+    <label>Current Road Condition:</label>
+    <select id="floodLevel">
+        <option value="Clear">🟢 Clear (No Flood)</option>
+        <option value="Ankle">🟡 Ankle Deep (Safe for cars)</option>
+        <option value="Knee">🟠 Knee Deep (Caution - High Cars only)</option>
+        <option value="Waist">🔴 Waist Deep (Dangerous - Do not enter)</option>
+        <option value="Submerged">🚫 Road Closed / Submerged</option>
+    </select>
 
-    <script>
-        // --- MOBILE CACHE BUSTER SCRIPT ---
-        // This ensures the phone gets fresh data every time someone clicks the green button
-        function openFreshMap() {
-            const sheetUrl = "https://docs.google.com/spreadsheets/d/1t1reD-ify3N_Xjr2MdVt0V24aBYmqpVuN6_LrZsWtmM/edit?usp=sharing";
-            
-            const uniqueStamp = new Date().getTime();
-            const finalUrl = sheetUrl + (sheetUrl.includes('?') ? '&' : '?') + "refresh=" + uniqueStamp;
-            
-            window.location.href = finalUrl;
-        }
+    <label>Landmark or Area Name:</label>
+    <input type="text" id="landmark" placeholder="e.g. Muwailah Commercial, Al Wahda St">
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const btn = document.getElementById('viewSheet');
-            if (btn) {
-                btn.onclick = function() {
-                    openFreshMap();
-                };
-            }
-        });
-    </script>
+    <button class="btn-green" onclick="submitReport()">Share Update Now</button>
+    <div id="status"></div>
 
+    <hr>
+    <p style="font-size: 13px; font-weight: bold; margin-bottom: 10px;">Check Real-Time Reports:</p>
+    <a id="viewSheet" class="btn-blue" target="_blank">View Live Flood Map</a>
+
+    <div class="footer">
+        Community Project • Created by <b>Lea Anzures</b><br>
+        Sharjah, UAE | March 2026
+    </div>
+</div>
+
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+
+<script>
+// --- YOUR GOOGLE FORM CONFIGURATION ---
+const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSftkLmIz38aChbdouob_hsxfrAArkpqhOj9GjRsd5t51-HRmA/formResponse";
+const LAT_ID = "entry.224957499"; 
+const LON_ID = "entry.2119998920";
+const LVL_ID = "entry.1735684480"; 
+const LND_ID = "entry.2123057663";
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/1jqvOtLpTU1lW8lWBrnyjAkFQZBOyeV91J8CpY_qzoHM/edit?resourcekey=&gid=723913191#gid=723913191";
+
+// Link the button to your sheet
+document.getElementById('viewSheet').href = SHEET_URL;
+
+function submitReport() {
+    const status = document.getElementById('status');
+    const landmark = document.getElementById('landmark').value;
+    const level = document.getElementById('floodLevel').value;
+
+    if (!landmark) { 
+        alert("Please enter a landmark or area name first!"); 
+        return; 
+    }
+
+    status.style.color = "#28a745";
+    status.innerText = "⏳ Processing your report...";
+
+    // Use Geolocation if available
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(pos) {
+                // Success: coordinates + data
+                sendToGoogle(pos.coords.latitude, pos.coords.longitude, level, landmark);
+            }, 
+            function(error) {
+                // Denied/Error: send landmark only
+                console.warn("GPS access denied. Sending landmark only.");
+                sendToGoogle("GPS Disabled", "GPS Disabled", level, landmark);
+            }, 
+            {enableHighAccuracy: true, timeout: 6000}
+        );
+    } else {
+        // Browser doesn't support GPS
+        sendToGoogle("Not Supported", "Not Supported", level, landmark);
+    }
+}
+
+function sendToGoogle(lat, lon, lvl, lnd) {
+    const status = document.getElementById('status');
+    const form = document.createElement('form');
+    form.action = FORM_URL;
+    form.method = 'POST';
+    form.target = 'hidden_iframe';
+
+    const fields = {
+        [LAT_ID]: lat, 
+        [LON_ID]: lon, 
+        [LVL_ID]: lvl, 
+        [LND_ID]: lnd
+    };
+
+    for (const key in fields) {
+        const input = document.createElement('input');
+        input.type = 'hidden'; 
+        input.name = key; 
+        input.value = fields[key];
+        form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    
+    // Give feedback and clear the form
+    setTimeout(() => {
+        document.body.removeChild(form);
+        status.innerText = "✅ Report shared successfully!";
+        alert("Thank you! Your report for " + lnd + " has been added to the database.");
+        document.getElementById('landmark').value = "";
+    }, 1200);
+}
+   
+    // --- THE CACHE BUSTER HERE ---
+    
+    const BASE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1t1reD-ify3N_Xjr2MdVt0V24aBYmqpVuN6_LrZsWtmM/edit?usp=sharing";
+    
+    // This generates a unique number based on the current second
+    const FINAL_URL = BASE_SHEET_URL + "&t=" + new Date().getTime();
+
+    // This updates the "View Live Flood Map" button automatically
+    if (document.getElementById('viewSheet')) {
+        document.getElementById('viewSheet').href = FINAL_URL;
+    }
+    
+    // --- END OF CACHE BUSTER ---
+</script>
 </body>
 </html>
+
